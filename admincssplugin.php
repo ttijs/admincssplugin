@@ -36,11 +36,7 @@ function admincssplugin_page(){
 //wp_register_style('admincss', plugins_url( 'admincss/assets/css/plugin.css' ));
 //wp_register_style('admincss', '/admincss/assets/css/plugin.css');
 wp_register_style('admincss', plugin_dir_url(__FILE__) . '/assets/css/plugin.css');
-
 wp_enqueue_style( 'admincss');
-
-
-
 
 function adminStylesCss3()
 {
