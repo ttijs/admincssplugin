@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .rotate {
+            width: 100px;
+            animation: rotation 2s infinite linear;
+        }
+
+        @keyframes rotation {
+            from {
+                /* transform: rotate(0deg); */
+                rotate: 0deg;
+            }
+
+            to {
+                /* transform: rotate(359deg); */
+                rotate: 365deg;
+            }
+        }
+
+        .animate__animated.rollout.animate__rollIn {
+            color: red;
+            --animate-delay: 9s;
+        }
+
+
+
+        .circle {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+            animation: rotateAndGrow 2s linear infinite;
+        }
+
+        @keyframes rotateAndGrow {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.5);
+            }
+
+            100% {
+                transform: rotate(360deg) scale(50);
+            }
+        }
+
+.metdelay {
+  width: 100px;
+  height: 100px;
+  background-color: magenta;
+  position: relative;
+  animation-name: example;
+  animation-duration: 4s;
+    animation-iteration-count: infinite;
+  animation-delay: 2s;
+  display: block;
+}
+
+@keyframes example {
+  0%   {background-color:red; left:0px; top:0px;}
+  25%  {background-color:yellow; left:200px; top:0px;}
+  50%  {background-color:blue; left:200px; top:200px;}
+  75%  {background-color:green; left:0px; top:200px;}
+  100% {background-color:magenta; left:0px; top:0px;}
+}
+
+
+
+</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+
+</head>
+
+<body>
+    <div class="animate__animated rollout animate__rollIn">aaaaaaaaaaa</div>
+
+
+    <div class="rotate">rotate</div>
+
+    <div class="circle"></div>
+
+
+    <div class="metdelayss"></div>
+
+    <input class="metdelay"  name="asdf" />
+</body>
+
+</html>
