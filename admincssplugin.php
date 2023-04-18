@@ -17,6 +17,7 @@ License: GPL-2.0+
 // }
 
 
+
 add_action('admin_menu', 'admincssplugin_menu');
 function admincssplugin_menu(){
  add_menu_page('Wijzig tekst','Admin CSS plugin','manage_options','admincssplugin_settings_page','admincssplugin_page');
@@ -38,16 +39,43 @@ function admincssplugin_page(){
 wp_register_style('admincss', plugin_dir_url(__FILE__) . '/assets/css/plugin.css');
 wp_enqueue_style( 'admincss');
 
+
+
+
 function adminStylesCss3()
 {
+
+  $username = wp_get_current_user()->user_login;
+  $blogusers = get_users();
+  // Array of WP_User objects.
+  foreach ($blogusers as $user) {
+    if ($user->display_name === $username) {
+      continue;
+    }
+    echo '<li>' . esc_html($user->display_name) . '</li>';
+    echo '<style>/* admincssplugin styles van ' . $user->display_name . ' */' . wp_unslash(get_option('admincssplugin_css-'. $user->display_name)) . '</style>';
+
+  }
+
+
 
   // $url = get_template_directory_uri() . "/wp-admin.css";
   // echo '<!-- Admin CSS styles -->
   //         <link rel="stylesheet" type="text/css" href="' . $url . '" />
   //         <!-- /end Admin CSS styles -->';
   //if (isset(get_option('admincss_css')) && '' !== get_option('admincss_css')) {
-    echo '<style>/* admincssplugin styles */' . wp_unslash(get_option('admincssplugin_css')) . '</style>';
+    echo '<style>/* admincssplugin styles van ' . $username . ' */' . wp_unslash(get_option('admincssplugin_css-'. $username)) . '</style>';
   //}
-}
-add_action('admin_head', 'adminStylesCss3');
 
+  add_filter('admin_body_class', 'my_admin_body_class');
+}
+add_action('admin_head', 'adminStylesCss3', 10, 2);
+
+function my_admin_body_class($classes)
+{
+  $username = wp_get_current_user()->user_login;
+  // Right: Add a leading space and a trailing space.
+  $classes .= ' ' . $username . ' ';
+
+  return $classes;
+}

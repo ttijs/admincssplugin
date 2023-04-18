@@ -1,10 +1,35 @@
 <?php
+
+
+$username = wp_get_current_user()->user_login;
+
+
+echo '
+<div>
+Hallo <span class="current_user">'. $username . '</span>
+<br> Je opponenten zijn:
+<ul>
+</div>
+
+';
+//$blogusers = get_users( array( 'role__in' => array( 'author', 'subscriber' ) ) );
+$blogusers = get_users();
+// Array of WP_User objects.
+foreach ( $blogusers as $user ) {
+    if ($user->display_name === $username) { continue;}
+    echo '<li>' . esc_html( $user->display_name ) . '</li>';
+}
+
+echo '</ul>';
+
+
+
+
 // Als er op bewaar wordt geklikt, bewaar het in de WP option.
 if (isset($_POST['wphw_submit'])) {
 
-  $admincssplugin_css = $_POST['admincssplugin_css'];
-  update_option('admincssplugin_css', $admincssplugin_css);
-
+  $admincssplugin_css = $_POST['admincssplugin_css-' . $username];
+  update_option('admincssplugin_css-' . $username, $admincssplugin_css);
 }
 ?>
 <div class="wrap">
@@ -32,7 +57,7 @@ if (isset($_POST['wphw_submit'])) {
               <fieldset>
                 <h3>CSS</h3>
                 <p class="description">Geef hieronder CSS in</p>
-                <textarea id="code_editor_page_css" rows="5" name="admincssplugin_css" class="widefat textarea"><?php echo wp_unslash(get_option('admincssplugin_css')); ?></textarea>
+                <textarea id="code_editor_page_css" rows="5" name="admincssplugin_css-<?php echo $username; ?>" class="widefat textarea"><?php echo wp_unslash(get_option('admincssplugin_css-' . $username)); ?></textarea>
               </fieldset>
 
             </td>
