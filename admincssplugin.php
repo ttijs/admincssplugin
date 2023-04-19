@@ -23,7 +23,7 @@ function admincssplugin_menu(){
  add_menu_page('Wijzig tekst','Admin CSS plugin','manage_options','admincssplugin_settings_page','admincssplugin_page');
 }
 function admincssplugin_page(){
- echo '<h2>'.__('Admin CSS Instellingen','menu-test').'</h2>';
+ echo '<h2>'.__('Wordpress Wacker','menu-test').'</h2>';
  include_once('admincssplugin_settings_page.php');
 }
 
@@ -46,13 +46,25 @@ function adminStylesCss3()
 {
 
   $username = wp_get_current_user()->user_login;
+
+  // admin menu links nog weg doen?
+  if ($username != 'admin') {
+    echo '<style>
+      #adminmenumain, #wpadminbar {
+        display: none;
+    }
+  ';
+  }
+
+
   $blogusers = get_users();
+  shuffle($blogusers);
   // Array of WP_User objects.
   foreach ($blogusers as $user) {
     if ($user->display_name === $username) {
       continue;
     }
-    echo '<li>' . esc_html($user->display_name) . '</li>';
+    //echo '<li>' . esc_html($user->display_name) . '</li>';
     echo '<style>/* admincssplugin styles van ' . $user->display_name . ' */' . wp_unslash(get_option('admincssplugin_css-'. $user->display_name)) . '</style>';
 
   }
