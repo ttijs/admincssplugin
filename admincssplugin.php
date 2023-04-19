@@ -36,7 +36,7 @@ function admincssplugin_page(){
 
 //wp_register_style('admincss', plugins_url( 'admincss/assets/css/plugin.css' ));
 //wp_register_style('admincss', '/admincss/assets/css/plugin.css');
-wp_register_style('admincss', plugin_dir_url(__FILE__) . '/assets/css/plugin.css');
+wp_register_style('admincss', plugin_dir_url(__FILE__) . '/assets/css/plugin.css?'.time());
 wp_enqueue_style( 'admincss');
 
 
@@ -70,15 +70,11 @@ function adminStylesCss3()
   }
 
 
+  // en dan nog deze user
+  echo '<style>/* admincssplugin styles van ' . $username . ' */' . wp_unslash(get_option('admincssplugin_css-'. $username)) . '</style>';
 
-  // $url = get_template_directory_uri() . "/wp-admin.css";
-  // echo '<!-- Admin CSS styles -->
-  //         <link rel="stylesheet" type="text/css" href="' . $url . '" />
-  //         <!-- /end Admin CSS styles -->';
-  //if (isset(get_option('admincss_css')) && '' !== get_option('admincss_css')) {
-    echo '<style>/* admincssplugin styles van ' . $username . ' */' . wp_unslash(get_option('admincssplugin_css-'. $username)) . '</style>';
-  //}
 
+  // dit hier ??
   add_filter('admin_body_class', 'my_admin_body_class');
 }
 add_action('admin_head', 'adminStylesCss3', 10, 2);

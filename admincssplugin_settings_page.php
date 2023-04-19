@@ -6,7 +6,7 @@ $username = wp_get_current_user()->user_login;
 
 echo '
 
-<div id="blackhole">platform</div>
+<div id="blackhole">Warp Hole</div>
 <style>
   #blackhole {
     width: 300px;
@@ -35,39 +35,19 @@ echo '
   width: 100%;
 }
 
+.opponenten-ul li {
+  /*display: inline-block; margin-right: 5px;*/
+} 
+
 </style>
 
 
-
-<div>
-
-  <div id="' . $username . '" class="ninjadiv">
-    <div>' . $username . '</div>
-    <img src="'.plugin_dir_url(__FILE__) . '/assets/ninja.avif">
-  </div>
-
-
-  <br><br>
-
-  Hey <span id="zzzzzzzzzzzz' . $username . '" class="zzzzzzzzzzcurrent_user">' . $username . '</span>
-  <br> Kun jij jouw avatar op het platform krijgen, en houden, <br>
-  zonder dat je opponenten je eraf gooien?<br><br>
-  
-  Je kunt elkaar het leven zuur maken met CSS.<br>
-  Elke tegenstander is te aan te wijzen met #username.
-  Dit is jouw wereld, te herkennen aan body.<i>jouw-user-naam</i>
-  <br>
-  Hieronder invoeren!
-
-  <br> Je opponenten zijn:
-
-  <ul>
-
 ';
+
 //$blogusers = get_users( array( 'role__in' => array( 'author', 'subscriber' ) ) );
 $blogusers = get_users();
 // Array of WP_User objects.
-$kleuren = array('yellow', 'red', 'blue', 'green', 'purple', 'orange');
+$kleuren = array('yellow', 'red', 'blue', 'green', 'purple', 'orange', 'cyan', 'deeppink');
 $teller = 0;
 foreach ($blogusers as $user) {
   if ($user->display_name === $username) {
@@ -83,16 +63,47 @@ foreach ($blogusers as $user) {
 
     continue;
   }
-  echo '<li>' . esc_html($user->display_name) . '</li>';
+  //  echo '<li>' . esc_html($user->display_name) . '</li>';
 
   echo '
-  <div id="' . $user->display_name . '" class="ninjadiv" style="background-color: '.$kleuren[$teller].'">
+  <div id="' . $user->display_name . '" class="ninjadiv" style="background-color: ' . $kleuren[$teller] . '">
     <div>' . $user->display_name . '</div>
-    <img src="'.plugin_dir_url(__FILE__) . '/assets/ninja.avif" id="ninja-' . $user->display_name . '">
+    <img src="' . plugin_dir_url(__FILE__) . '/assets/ninja.avif" id="ninja-' . $user->display_name . '">
   </div>
   ';
   $teller++;
 }
+
+echo '
+  <div id="' . $username . '" class="ninjadiv">
+    <div>' . $username . '</div>
+    <img src="' . plugin_dir_url(__FILE__) . '/assets/ninja.avif">
+  </div>
+
+  <br><br><br><br><br><br>
+';
+
+echo '
+<div class="intro">
+  Hey <span id="zzzzzzzzzzzz' . $username . '" class="zzzzzzzzzzcurrent_user">' . $username . '</span>
+  <br>Kun jij je opponenten in het zwarte gat gooien en naar een andere deze wereld helpen?<br>
+  EN zorgen dat je er zelf niet wordt afgegooid!?<br><br>
+  
+  Je kunt dat doen (elkaar het leven zuur maken) met CSS.<br>
+  <br>
+  Hieronder in te voeren!
+
+  <br> De <span class="ids">id</span>\'s van je Je opponenten zijn:
+
+  <ul class="opponenten-ul">';
+
+foreach ($blogusers as $user) {
+  if ($user->display_name === $username) {
+    continue;
+  }
+  echo '<li>' . esc_html($user->display_name) . '</li>';
+}
+
 
 echo '</ul>';
 
@@ -111,8 +122,6 @@ if (isset($_POST['wphw_submit'])) {
   document.location.reload(true);
   </script>
   ';
-
-
 }
 ?>
 <div class="wrap">
@@ -196,10 +205,14 @@ if (isset($_POST['wphw_submit'])) {
   }
 
   const el1 = document.getElementById('blackhole');
-  const el2 = document.getElementById('<?php echo 'ninja-'.$username; ?>');
+  const el2 = document.getElementById('<?php echo $username; ?>');
 
   if (elementsOverlap(el1, el2)) {
-    alert('Gewonnen!\nMaar voor hoe lang??');
+    alert('Je bent er uit geknikkerd!\n\nDOE!');
+    //window.location.href = "http://www.w3schools.com";
+    window.location.href = "<?php echo wp_logout_url(home_url()); ?>";
+    
+
   } else {
     console.log('nog niet goed!')
   }
