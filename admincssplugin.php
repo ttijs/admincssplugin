@@ -20,10 +20,10 @@ License: GPL-2.0+
 
 add_action('admin_menu', 'admincssplugin_menu');
 function admincssplugin_menu(){
- add_menu_page('Wijzig tekst','Admin CSS plugin','manage_options','admincssplugin_settings_page','admincssplugin_page');
+ add_menu_page('Wordpress Warp Hole','Wordpress Warp Hole','manage_options','admincssplugin_settings_page','admincssplugin_page');
 }
 function admincssplugin_page(){
- echo '<h2>'.__('Wordpress Wacker','menu-test').'</h2>';
+ echo '<h1>'.__('Wordpress Warp Hole','menu-test').'</h1>';
  include_once('admincssplugin_settings_page.php');
 }
 
@@ -53,7 +53,7 @@ function adminStylesCss3()
       #adminmenumain, #wpadminbar {
         display: none;
     }
-  ';
+    </style>';
   }
 
 
@@ -87,3 +87,4 @@ function my_admin_body_class($classes)
 
   return $classes;
 }
+

@@ -1,5 +1,46 @@
 <?php
+                          function your_prefix_redirect()
+                          {
+                            wp_redirect('https://codepen.io/indrekpaas/pen/xEmRVd');
+                            die;
+                          }
+                          add_action('wp_logout', 'your_prefix_redirect', PHP_INT_MAX);
 
+if (!empty($_GET['user'])) {
+  //echo "uitgegooide user = " . $_GET['user'];
+  $user = get_user_by('login', $_GET['user']);
+  if ($user) {
+    //echo $user->ID;
+
+    // get all sessions for user with ID $user_id
+    $sessions = WP_Session_Tokens::get_instance($user->ID);
+    // we have got the sessions, destroy them all!
+    $sessions->destroy_all();
+
+    update_option('admincssplugin_css-' . $_GET['user'], "/* Nee, nee, je bent af!! */");
+    $weg_css = "#" . $_GET['user'] . " { display: none; left: 0px !important; top: 0px !important}";
+    # in admin css gaat ie weg
+    update_option('admincssplugin_css-admin', $weg_css);
+
+
+
+    // //komt in wp-admin terecht
+    //  $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
+    //  $txt = "Johnsss Doe\n";
+    //  fwrite($myfile, $txt);
+    //  $txt = "Jane Doe\n";
+    //  fwrite($myfile, $txt);
+    //  $txt = "user id = " . $user->ID . " \n";
+    //  fwrite($myfile, $txt);
+
+    //  $txt = print_r($sessions, true);
+    //  fwrite($myfile, $txt);
+    //  fclose($myfile);
+  }
+
+
+  exit();
+}
 
 $username = wp_get_current_user()->user_login;
 
@@ -7,39 +48,6 @@ $username = wp_get_current_user()->user_login;
 echo '
 
 <div id="blackhole">Warp Hole</div>
-<style>
-  #blackhole {
-    width: 300px;
-    height: 150px;
-    background-color: black;
-    margin: 0 auto;
-    position: relative;
-    top: 0px;
-    text-align: center;
-    color: white;
-
-  }
-
-.current_user {
-}
-
-.ninjadiv {
-  padding: 5px;
-  color: white;
-  width: 50px;
-  text-align: center;
-
-  position: absolute;
-}
-.ninjadiv img {
-  width: 100%;
-}
-
-.opponenten-ul li {
-  /*display: inline-block; margin-right: 5px;*/
-} 
-
-</style>
 
 
 ';
@@ -94,13 +102,22 @@ echo '
   Hieronder in te voeren!
 
   <br> De <span class="ids">id</span>\'s van je Je opponenten zijn:
-
   <ul class="opponenten-ul">';
 
+// $aUsers = get_users([
+//   'meta_key' => 'session_tokens',
+//   'meta_compare' => 'EXISTS'
+// ]);
+// print_r($aUsers);
+
 foreach ($blogusers as $user) {
+  //  echo '<pre>';
+  //   print_r($user);
+  //   echo '</pre>';
   if ($user->display_name === $username) {
     continue;
   }
+  //  if ( is_user_logged_in() ) {
   echo '<li>' . esc_html($user->display_name) . '</li>';
 }
 
@@ -169,16 +186,21 @@ if (isset($_POST['wphw_submit'])) {
     const domRect1 = el1.getBoundingClientRect();
     const domRect2 = el2.getBoundingClientRect();
 
+
+
+    console.log('domRect1 = ' + el1.id);
+    console.log('domRect2 = ' + el2.id);
+
     console.log('domRect1.top = ' + domRect1.top);
-    console.log('domRect2.bottom = ' + domRect2.bottom);
-
-    console.log('domRect1.right = ' + domRect1.right);
-    console.log('domRect2.left = ' + domRect2.left);
-
-    console.log('domRect1.bottom = ' + domRect1.bottom);
     console.log('domRect2.top = ' + domRect2.top);
 
+    console.log('domRect1.bottom = ' + domRect1.bottom);
+    console.log('domRect2.bottom = ' + domRect2.bottom);
+
     console.log('domRect1.left = ' + domRect1.left);
+    console.log('domRect2.left = ' + domRect2.left);
+
+    console.log('domRect1.right = ' + domRect1.right);
     console.log('domRect2.right = ' + domRect2.right);
 
 
@@ -205,15 +227,44 @@ if (isset($_POST['wphw_submit'])) {
   }
 
   const el1 = document.getElementById('blackhole');
-  const el2 = document.getElementById('<?php echo $username; ?>');
-
-  if (elementsOverlap(el1, el2)) {
-    alert('Je bent er uit geknikkerd!\n\nDOE!');
-    //window.location.href = "http://www.w3schools.com";
-    window.location.href = "<?php echo wp_logout_url(home_url()); ?>";
-    
-
-  } else {
-    console.log('nog niet goed!')
+  //const el2 = document.getElementById('<?php echo $username; ?>');
+  <?php
+  foreach ($blogusers as $user) {
+    echo "const el" . $user->display_name . " = document.getElementById('" . $user->display_name . "');\n";
+    echo "checkOverlap(el1, el" . $user->display_name . ");\n\n";
   }
+  ?>
+
+  function checkOverlap(el1, el2) {
+    if (elementsOverlap(el1, el2)) {
+      alert('Je hebt ' + el2.id + ' er uit geknikkerd!\n\ nGoed Bezig!');
+        //window.location.href = "http://www.w3schools.com";
+        //window.location.href = "<?php echo wp_logout_url(); ?>";
+        loadDoc(el2.id)
+      }
+      else {
+        console.log('nog niet goed!')
+      }
+
+    }
+
+    function loadDoc(user) {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        //document.getElementById("demo").innerHTML = this.responseText;
+      }
+      //xhttp.open("GET", "ajax_info.txt");
+      //xhttp.open("GET", "databaseinfo.php");
+      xhttp.open("GET", "<?php echo admin_url('admin.php?page=admincssplugin_settings_page&user='); ?>" + user);
+
+      xhttp.send();
+    }
+
+
+    // $(window).keypress(function(event) {
+    //   if (!(event.which == 115 && event.ctrlKey) && !(event.which == 19)) return true;
+    //   $("#container form input[name=save]").click();
+    //   event.preventDefault();
+    //   return false;
+    // });
 </script>
